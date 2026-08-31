@@ -469,7 +469,7 @@ export default function LiveDashboardView({
       )}
       {isDesktop && !fullscreen && (
         <div className="mb-2 flex items-center justify-end gap-2 px-2">
-          <span className="text-sm text-muted-foreground">Columns</span>
+          <span className="text-sm text-muted-foreground">Layout</span>
           <div className="flex items-center gap-1">
             {(["auto", "2", "3", "4"] as const).map((columns) => (
               <Button
@@ -520,7 +520,7 @@ export default function LiveDashboardView({
                         ? "grid-cols-2"
                         : desktopColumns == "3"
                           ? "grid-cols-3"
-                          : "grid-cols-4"),
+                          : "grid-cols-4"),>Columns</span>
                   isMobile && "px-0",
                 )}
               >

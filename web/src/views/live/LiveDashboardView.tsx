@@ -468,17 +468,20 @@ export default function LiveDashboardView({
         </div>
       )}
       {isDesktop && !fullscreen && (
-        <div className="mb-2 flex items-center justify-end gap-1 px-2">
-          {(["auto", "2", "3", "4"] as const).map((columns) => (
-            <Button
-              key={columns}
-              size="sm"
-              variant={desktopColumns == columns ? "default" : "secondary"}
-              onClick={() => setDesktopColumns(columns)}
-            >
-              {columns == "auto" ? "Auto" : columns}
-            </Button>
-          ))}
+        <div className="mb-2 flex items-center justify-end gap-2 px-2">
+          <span className="text-sm text-muted-foreground">Columns</span>
+          <div className="flex items-center gap-1">
+            {(["auto", "2", "3", "4"] as const).map((columns) => (
+              <Button
+                key={columns}
+                size="sm"
+                variant={desktopColumns == columns ? "default" : "secondary"}
+                onClick={() => setDesktopColumns(columns)}
+              >
+                {columns == "auto" ? "Auto" : columns}
+              </Button>
+            ))}
+          </div>
         </div>
       )}
       {cameras.length == 0 && !includeBirdseye ? (

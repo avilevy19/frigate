@@ -494,7 +494,7 @@ export default function LiveDashboardView({
                 className={cn(
                   "mt-2 grid grid-cols-1 gap-2 px-2 md:gap-4",
                   mobileLayout == "grid" &&
-                    "grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4",
+                    "grid-cols-2",
                   isMobile && "px-0",
                 )}
               >

@@ -511,7 +511,7 @@ export default function DraggableGridLayout({
       !currentGridLayout ||
       !isEqual(cameras, currentCameras) ||
       includeBirdseye !== currentIncludeBirdseye ? (
-        <div className="mt-2 grid grid-cols-2 gap-2 px-2 md:gap-4 xl:grid-cols-3 3xl:grid-cols-4">
+        <div className="mt-2 grid grid-cols-2 gap-2 px-2 md:gap-4">
           {includeBirdseye && birdseyeConfig?.enabled && (
             <Skeleton className="size-full rounded-lg md:rounded-2xl" />
           )}

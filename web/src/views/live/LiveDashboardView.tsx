@@ -84,6 +84,10 @@ export default function LiveDashboardView({
     isDesktop ? "grid" : "list",
   );
 
+  const [desktopColumns, setDesktopColumns] = useUserPersistence<
+    "auto" | "2" | "3" | "4"
+  >("live-desktop-columns", "2");
+
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const birdseyeContainerRef = useRef<HTMLDivElement>(null);
@@ -463,7 +467,20 @@ export default function LiveDashboardView({
           )}
         </div>
       )}
-
+      {isDesktop && !fullscreen && (
+        <div className="mb-2 flex items-center justify-end gap-1 px-2">
+          {(["auto", "2", "3", "4"] as const).map((columns) => (
+            <Button
+              key={columns}
+              size="sm"
+              variant={desktopColumns == columns ? "default" : "secondary"}
+              onClick={() => setDesktopColumns(columns)}
+            >
+              {columns == "auto" ? "Auto" : columns}
+            </Button>
+          ))}
+        </div>
+      )}
       {cameras.length == 0 && !includeBirdseye ? (
         <NoCameraView cameraGroup={cameraGroup} />
       ) : (
@@ -494,7 +511,13 @@ export default function LiveDashboardView({
                 className={cn(
                   "mt-2 grid grid-cols-1 gap-2 px-2 md:gap-4",
                   mobileLayout == "grid" &&
-                    "grid-cols-2",
+                    (desktopColumns == "auto"
+                      ? "grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4"
+                      : desktopColumns == "2"
+                        ? "grid-cols-2"
+                        : desktopColumns == "3"
+                          ? "grid-cols-3"
+                          : "grid-cols-4"),
                   isMobile && "px-0",
                 )}
               >

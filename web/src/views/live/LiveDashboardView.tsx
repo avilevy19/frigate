@@ -87,7 +87,10 @@ export default function LiveDashboardView({
   const [desktopColumns, setDesktopColumns] = useUserPersistence<
     "auto" | "2" | "3" | "4"
   >("live-desktop-columns", "2");
-
+  const [showRecentEvents, setShowRecentEvents] = useUserPersistence<boolean>(
+    "live-show-recent-events",
+    true,
+  );
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const birdseyeContainerRef = useRef<HTMLDivElement>(null);
@@ -469,6 +472,18 @@ export default function LiveDashboardView({
       )}
       {isDesktop && !fullscreen && (
         <div className="mb-2 flex items-center justify-end gap-2 px-2">
+          {events && events.length > 0 && (
+            <Button
+              variant="secondary"
+              size="sm"
+              className="gap-2"
+              aria-expanded={showRecentEvents}
+              onClick={() => setShowRecentEvents(!showRecentEvents)}
+            >
+              <span aria-hidden="true">{showRecentEvents ? "▴" : "▾"}</span>
+              Recent events ({events.length})
+            </Button>
+          )}
           <span className="text-sm text-muted-foreground">Layout</span>
           <div className="flex items-center gap-1">
             {(["auto", "2", "3", "4"] as const).map((columns) => (
@@ -488,25 +503,28 @@ export default function LiveDashboardView({
         <NoCameraView cameraGroup={cameraGroup} />
       ) : (
         <>
-          {!fullscreen && events && events.length > 0 && (
-            <ScrollArea>
-              <TooltipProvider>
-                <div className="flex items-center gap-2 px-1">
-                  {events.map((event) => {
-                    return (
-                      <AnimatedEventCard
-                        key={event.id}
-                        event={event}
-                        selectedGroup={cameraGroup}
-                        updateEvents={updateEvents}
-                      />
-                    );
-                  })}
-                </div>
-              </TooltipProvider>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          )}
+          {!fullscreen &&
+            events &&
+            events.length > 0 &&
+            (!isDesktop || showRecentEvents) && (
+              <ScrollArea>
+                <TooltipProvider>
+                  <div className="flex items-center gap-2 px-1">
+                    {events.map((event) => {
+                      return (
+                        <AnimatedEventCard
+                          key={event.id}
+                          event={event}
+                          selectedGroup={cameraGroup}
+                          updateEvents={updateEvents}
+                        />
+                      );
+                    })}
+                  </div>
+                </TooltipProvider>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea>
+            )}
 
           {!cameraGroup || cameraGroup == "default" || isMobileOnly ? (
             <>

@@ -1,0 +1,39 @@
+name: AVI Custom AMD64 Build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  amd64_build:
+    runs-on: ubuntu-22.04
+    name: AMD64 Custom Build
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Prepare Docker build
+        id: setup
+        uses: ./.github/actions/setup
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push AMD64 image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: docker/main/Dockerfile
+          push: true
+          platforms: linux/amd64
+          target: frigate
+          tags: |
+            ${{ steps.setup.outputs.image-name }}-amd64
+            ghcr.io/avilevy19/frigate:avi-live-layout-amd64
+          cache-from: type=registry,ref=${{ steps.setup.outputs.cache-name }}-amd64
+          cache-to: type=registry,ref=${{ steps.setup.outputs.cache-name }}-amd64,mode=max
